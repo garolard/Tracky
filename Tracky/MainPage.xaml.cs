@@ -31,33 +31,16 @@ namespace Tracky
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private readonly TraktClient _client;
+
         public MainPage()
         {
             this.InitializeComponent();
-
+            _client = new TraktClient(Constants.TraktId);
             Shows = new ObservableCollection<TraktShow>();
         }
         
         public ObservableCollection<TraktShow> Shows { get; set; }
-        
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
-        {
-            var client = new TraktClient("2a2f9d290074c6384c5836364cc670827c082cab515d721c7b87938324c2eb70");
-            var searchResults = await client.Search.GetTextQueryResultsAsync(TraktSearchResultType.Show, "The Get Down");
-
-            var tasks = searchResults
-                .Select(result => result.Show.Ids.Trakt.ToString())
-                .Select(showId => client.Shows.GetShowAsync(showId, new TraktExtendedOption { Full = true, Images = true }))
-                .ToList();
-
-            var fullShows = await Task.WhenAll(tasks);
-            foreach (var show in fullShows)
-            {
-                Shows.Add(show);
-            }
-
-            base.OnNavigatedTo(e);
-        }
 
         private void GridElement_OnTapped(object sender, TappedRoutedEventArgs e)
         {
@@ -70,6 +53,24 @@ namespace Tracky
             service.PrepareToAnimate("SelectedShow", posterImage);
 
             Frame.Navigate(typeof(DetailPage), show);
+        }
+
+        private async void SearchBox_OnQuerySubmitted(SearchBox sender, SearchBoxQuerySubmittedEventArgs args)
+        {
+            var query = args.QueryText;
+            var searchResults = await _client.Search.GetTextQueryResultsAsync(TraktSearchResultType.Show, query);
+
+            var tasks = searchResults
+                .Select(result => result.Show.Ids.Trakt.ToString())
+                .Select(showId => _client.Shows.GetShowAsync(showId, new TraktExtendedOption { Full = true, Images = true }))
+                .ToList();
+
+            var fullShows = await Task.WhenAll(tasks);
+            Shows.Clear();
+            foreach (var show in fullShows)
+            {
+                Shows.Add(show);
+            }
         }
     }
 }

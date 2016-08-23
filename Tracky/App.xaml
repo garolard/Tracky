@@ -5,4 +5,8 @@
     xmlns:local="using:Tracky"
     RequestedTheme="Light">
 
+    <Application.Resources>
+        <local:RatingsConverter x:Key="Ratings"/>
+        <local:VotesConverter x:Key="Votes"/>
+    </Application.Resources>
 </Application>

@@ -36,11 +36,56 @@
             <TextBlock x:Name="Year"
                        Text="{Binding Year}"
                        Style="{ThemeResource CaptionTextBlockStyle}"
-                       Margin="40,8,0,0"
+                       Margin="8,0,0,8"
                        Foreground="White"
-                       FontSize="14"
-                       RelativePanel.Below="Title"
-                       RelativePanel.AlignLeftWith="Title" />
+                       FontSize="16"
+                       Opacity=".8"
+                       RelativePanel.RightOf="Title"
+                       RelativePanel.AlignBottomWith="Title" />
+            
+            <Grid x:Name="RatingGrid"
+                  Margin="40,0,0,0"
+                  RelativePanel.Below="Title"
+                  RelativePanel.AlignLeftWith="Title">
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <FontIcon Grid.Column="0"
+                          Grid.ColumnSpan="1"
+                          Grid.Row="0"
+                          Grid.RowSpan="2"
+                          FontFamily="Segoe MDL2 Assets" 
+                          FontSize="24"
+                          Glyph="&#xE00B;" 
+                          Foreground="DarkRed" />
+                
+                <TextBlock x:Name="Rating"
+                           Text="{Binding Rating, Converter={StaticResource Ratings}}"
+                           Style="{ThemeResource BodyTextBlockStyle}"
+                           Margin="8,0,0,0"
+                           Foreground="White"
+                           FontWeight="Bold"
+                           FontSize="14"
+                           Grid.Row="0"
+                           Grid.Column="1"/>
+                
+                <TextBlock x:Name="Votes"
+                           Text="{Binding Votes, Converter={StaticResource Votes}}"
+                           Style="{ThemeResource BodyTextBlockStyle}"
+                           Margin="8,0,0,0"
+                           Foreground="White"
+                           Opacity=".8"
+                           FontSize="11"
+                           Grid.Row="1"
+                           Grid.Column="1"/>
+            </Grid>
+
             <TextBlock x:Name="Overview"
                        Text="{Binding Overview}"
                        Style="{ThemeResource BodyTextBlockStyle}"
@@ -48,7 +93,7 @@
                        Foreground="White"
                        MaxWidth="800"
                        TextWrapping="Wrap"
-                       RelativePanel.Below="Year"
+                       RelativePanel.Below="RatingGrid"
                        RelativePanel.AlignLeftWith="Title"/>
         </RelativePanel>
     </Grid>

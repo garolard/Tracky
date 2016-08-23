@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Media.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -33,7 +34,8 @@ namespace Tracky
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            this.DataContext = (TraktShow) e.Parameter;
+            var show = (TraktShow)e.Parameter;
+            this.DataContext = show;
 
             var service = ConnectedAnimationService.GetForCurrentView();
             service.GetAnimation("SelectedShow").TryStart(this.Poster);

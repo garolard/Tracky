@@ -8,38 +8,56 @@
     xmlns:uwp="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:trakt="using:TraktApiSharp.Objects.Get.Shows"
     mc:Ignorable="d" DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+
+    <Page.Transitions>
+        <TransitionCollection>
+            <NavigationThemeTransition>
+                <NavigationThemeTransition.DefaultNavigationTransitionInfo>
+                    <ContinuumNavigationTransitionInfo />
+                </NavigationThemeTransition.DefaultNavigationTransitionInfo>
+            </NavigationThemeTransition>
+        </TransitionCollection>
+    </Page.Transitions>
+
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <uwp:AdaptiveGridView ItemsSource="{Binding Shows}"
-                              ItemHeight="400"
-                              DesiredWidth="260"
-                              VerticalAlignment="Stretch"
-                              HorizontalAlignment="Stretch">
-            <uwp:AdaptiveGridView.Transitions>
-                <TransitionCollection>
-                    <AddDeleteThemeTransition/>
-                    <ContentThemeTransition/>
-                    <EntranceThemeTransition IsStaggeringEnabled="True"/>
-                </TransitionCollection>
-            </uwp:AdaptiveGridView.Transitions>
-            <uwp:AdaptiveGridView.ItemTemplate>
-                <DataTemplate x:DataType="trakt:TraktShow">
-                    <Grid Background="LightGray" Tapped="GridElement_OnTapped">
-                        <uwp:ImageEx Source="{Binding Images.Poster.Medium}"
-                                     Stretch="UniformToFill"
-                                     PlaceholderSource="Assets/trakt-icon.png"
-                                     PlaceholderStretch="None"
-                                     IsCacheEnabled="True"
-                                     VerticalAlignment="Stretch"
-                                     HorizontalAlignment="Stretch"/>
-                        <TextBlock Text="{x:Bind Title}"
-                                   Style="{StaticResource SubtitleTextBlockStyle}"
-                                   Margin="12"
-                                   Foreground="White"
-                                   VerticalAlignment="Bottom"
-                                   HorizontalAlignment="Left"/>
-                    </Grid>
-                </DataTemplate>
-            </uwp:AdaptiveGridView.ItemTemplate>
-        </uwp:AdaptiveGridView>
+        <StackPanel>
+            <SearchBox x:Name="SearchBox"
+                       Width="240"
+                       Margin="20"
+                       HorizontalAlignment="Left"
+                       QuerySubmitted="SearchBox_OnQuerySubmitted"/>
+            <uwp:AdaptiveGridView ItemsSource="{Binding Shows}"
+                                  ItemHeight="400"
+                                  DesiredWidth="260"
+                                  VerticalAlignment="Stretch"
+                                  HorizontalAlignment="Stretch">
+                <uwp:AdaptiveGridView.Transitions>
+                    <TransitionCollection>
+                        <AddDeleteThemeTransition/>
+                        <ContentThemeTransition/>
+                        <EntranceThemeTransition IsStaggeringEnabled="True"/>
+                    </TransitionCollection>
+                </uwp:AdaptiveGridView.Transitions>
+                <uwp:AdaptiveGridView.ItemTemplate>
+                    <DataTemplate x:DataType="trakt:TraktShow">
+                        <Grid Background="LightGray" Tapped="GridElement_OnTapped">
+                            <uwp:ImageEx Source="{Binding Images.Poster.Medium}"
+                                         Stretch="UniformToFill"
+                                         PlaceholderSource="Assets/trakt-icon.png"
+                                         PlaceholderStretch="None"
+                                         IsCacheEnabled="True"
+                                         VerticalAlignment="Stretch"
+                                         HorizontalAlignment="Stretch"/>
+                            <TextBlock Text="{x:Bind Title}"
+                                       Style="{StaticResource SubtitleTextBlockStyle}"
+                                       Margin="12"
+                                       Foreground="White"
+                                       VerticalAlignment="Bottom"
+                                       HorizontalAlignment="Left"/>
+                        </Grid>
+                    </DataTemplate>
+                </uwp:AdaptiveGridView.ItemTemplate>
+            </uwp:AdaptiveGridView>
+        </StackPanel>
     </Grid>
 </Page>
