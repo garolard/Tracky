@@ -5,9 +5,41 @@
     xmlns:local="using:Tracky"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
-
+    xmlns:uwp="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:trakt="using:TraktApiSharp.Objects.Get.Shows"
+    mc:Ignorable="d" DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+        <uwp:AdaptiveGridView ItemsSource="{Binding Shows}"
+                              ItemHeight="400"
+                              DesiredWidth="260"
+                              VerticalAlignment="Stretch"
+                              HorizontalAlignment="Stretch">
+            <uwp:AdaptiveGridView.Transitions>
+                <TransitionCollection>
+                    <AddDeleteThemeTransition/>
+                    <ContentThemeTransition/>
+                    <EntranceThemeTransition IsStaggeringEnabled="True"/>
+                </TransitionCollection>
+            </uwp:AdaptiveGridView.Transitions>
+            <uwp:AdaptiveGridView.ItemTemplate>
+                <DataTemplate x:DataType="trakt:TraktShow">
+                    <Grid Background="LightGray" Tapped="GridElement_OnTapped">
+                        <uwp:ImageEx Source="{Binding Images.Poster.Medium}"
+                                     Stretch="UniformToFill"
+                                     PlaceholderSource="Assets/trakt-icon.png"
+                                     PlaceholderStretch="None"
+                                     IsCacheEnabled="True"
+                                     VerticalAlignment="Stretch"
+                                     HorizontalAlignment="Stretch"/>
+                        <TextBlock Text="{x:Bind Title}"
+                                   Style="{StaticResource SubtitleTextBlockStyle}"
+                                   Margin="12"
+                                   Foreground="White"
+                                   VerticalAlignment="Bottom"
+                                   HorizontalAlignment="Left"/>
+                    </Grid>
+                </DataTemplate>
+            </uwp:AdaptiveGridView.ItemTemplate>
+        </uwp:AdaptiveGridView>
     </Grid>
 </Page>
