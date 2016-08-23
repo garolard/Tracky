@@ -9,7 +9,7 @@ namespace Tracky
         {
             var votes = (int) value;
 
-            if (votes < 1000) return ((int) value).ToString("###") + " votes";
+            if (votes < 1000) return ((int) value).ToString("##0") + " votes";
             else return (((int) value)/1000).ToString("##") + "k votes";
         }
 

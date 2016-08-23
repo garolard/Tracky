@@ -9,7 +9,7 @@ namespace Tracky
         {
             var rating = (float) value;
             rating = rating*10;
-            return Math.Truncate(rating).ToString("###") + "%";
+            return Math.Truncate(rating).ToString("##0") + "%";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, string language)
