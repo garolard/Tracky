@@ -22,8 +22,7 @@
     <Page.Resources>
         <DataTemplate x:Key="ShowTemplate" x:DataType="trakt:TraktShow">
             <Grid Background="LightGray" 
-                  Tapped="GridElement_OnTapped"
-                  MaxWidth="260">
+                  Tapped="GridElement_OnTapped">
                 <uwp:ImageEx Source="{Binding Images.Poster.Medium}"
                                          Stretch="UniformToFill"
                                          PlaceholderSource="Assets/trakt-icon.png"
@@ -59,6 +58,7 @@
                               ItemTemplate="{StaticResource ShowTemplate}"
                               ItemHeight="400"
                               DesiredWidth="260"
+                              HorizontalContentAlignment="Center"
                               Grid.Row="1"/>
     </Grid>
 </Page>

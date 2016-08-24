@@ -51,6 +51,12 @@ namespace Tracky
             if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
             {
                 var query = sender.Text;
+                if (string.IsNullOrEmpty(query))
+                {
+                    SearchBox.ItemsSource = new TraktShow[] { new TraktShow() { Title = "No results" } };
+                    return;
+                }
+
                 var searchResults = await _client.Search.GetTextQueryResultsAsync(TraktSearchResultType.Show, query);
 
                 var tasks = searchResults
