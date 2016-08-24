@@ -14,8 +14,7 @@
                      Source="{Binding Images.FanArt.Full}"
                      Stretch="UniformToFill"
                      HorizontalAlignment="Stretch"
-                     VerticalAlignment="Stretch"
-                     ImageOpened="Background_OnImageOpened" />
+                     VerticalAlignment="Stretch" />
         <Border Background="#A5000000"/>
         <RelativePanel x:Name="ContentRoot">
             <Image x:Name="Poster"

@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
-using Windows.Foundation;
-using Windows.Foundation.Collections;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
-using Windows.UI.Xaml.Navigation;
 using Microsoft.Toolkit.Uwp.UI;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using TraktApiSharp;
@@ -48,16 +37,55 @@ namespace Tracky
             var posterImage = element.FindDescendant<ImageEx>();
             var show = element.DataContext as TraktShow;
 
-            var service = ConnectedAnimationService.GetForCurrentView();
-
-            service.PrepareToAnimate("SelectedShow", posterImage);
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.Xaml.Media.Animation.ConnectedAnimationService"))
+            {
+                var service = ConnectedAnimationService.GetForCurrentView();
+                service.PrepareToAnimate("SelectedShow", posterImage);
+            }
 
             Frame.Navigate(typeof(DetailPage), show);
         }
 
-        private async void SearchBox_OnQuerySubmitted(SearchBox sender, SearchBoxQuerySubmittedEventArgs args)
+        private async void SearchBox_OnTextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
-            var query = args.QueryText;
+            if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
+            {
+                var query = sender.Text;
+                var searchResults = await _client.Search.GetTextQueryResultsAsync(TraktSearchResultType.Show, query);
+
+                var tasks = searchResults
+                    .Select(result => result.Show.Ids.Trakt.ToString())
+                    .Select(showId => _client.Shows.GetShowAsync(showId, new TraktExtendedOption { Full = true, Images = true }))
+                    .ToList();
+
+                var fullShows = await Task.WhenAll(tasks);
+                if (fullShows.Any())
+                    SearchBox.ItemsSource = fullShows;
+                else
+                    SearchBox.ItemsSource = new TraktShow[] {new TraktShow() {Title = "No results"}};
+            }
+        }
+
+        private void SearchBox_OnSuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        {
+            var selectedShow = (TraktShow)args.SelectedItem;
+            sender.Text = selectedShow.Title;
+        }
+
+        private async void SearchBox_OnQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            var query = string.Empty;
+
+            if (args.ChosenSuggestion != null)
+            {
+                var selectedShow = (TraktShow) args.ChosenSuggestion;
+                query = selectedShow.Title;
+            }
+            else
+            {
+                query = sender.Text;
+            }
+
             var searchResults = await _client.Search.GetTextQueryResultsAsync(TraktSearchResultType.Show, query);
 
             var tasks = searchResults

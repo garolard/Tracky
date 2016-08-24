@@ -21,7 +21,9 @@
     
     <Page.Resources>
         <DataTemplate x:Key="ShowTemplate" x:DataType="trakt:TraktShow">
-            <Grid Background="LightGray" Tapped="GridElement_OnTapped">
+            <Grid Background="LightGray" 
+                  Tapped="GridElement_OnTapped"
+                  MaxWidth="260">
                 <uwp:ImageEx Source="{Binding Images.Poster.Medium}"
                                          Stretch="UniformToFill"
                                          PlaceholderSource="Assets/trakt-icon.png"
@@ -44,11 +46,15 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <SearchBox x:Name="SearchBox"
-                    Width="240"
-                    Margin="20"
-                    HorizontalAlignment="Left"
-                    QuerySubmitted="SearchBox_OnQuerySubmitted"/>
+        <AutoSuggestBox x:Name="SearchBox"
+                        Width="240"
+                        Margin="20"
+                        HorizontalAlignment="Left"
+                        DisplayMemberPath="Title"
+                        QueryIcon="Find"
+                        TextChanged="SearchBox_OnTextChanged"
+                        SuggestionChosen="SearchBox_OnSuggestionChosen"
+                        QuerySubmitted="SearchBox_OnQuerySubmitted"/>
         <uwp:AdaptiveGridView ItemsSource="{Binding Shows}"
                               ItemTemplate="{StaticResource ShowTemplate}"
                               ItemHeight="400"
