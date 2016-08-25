@@ -79,6 +79,13 @@
                               ItemHeight="400"
                               DesiredWidth="260"
                               HorizontalContentAlignment="Center"
-                              Grid.Row="1"/>
+                              Grid.Row="1">
+            <uwp:AdaptiveGridView.Transitions>
+                <TransitionCollection>
+                    <EntranceThemeTransition IsStaggeringEnabled="True"/>
+                    <AddDeleteThemeTransition/>
+                </TransitionCollection>
+            </uwp:AdaptiveGridView.Transitions>
+        </uwp:AdaptiveGridView>
     </Grid>
 </Page>

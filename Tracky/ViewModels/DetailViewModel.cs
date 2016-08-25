@@ -4,6 +4,7 @@ using GeekyTool.Base;
 using GeekyTool.Helpers;
 using GeekyTool.Services;
 using TraktApiSharp;
+using TraktApiSharp.Objects.Basic;
 using TraktApiSharp.Objects.Get.People;
 using TraktApiSharp.Objects.Get.Shows;
 using TraktApiSharp.Requests.Params;
@@ -19,7 +20,7 @@ namespace Tracky.ViewModels
         public DetailViewModel()
         {
             _client = new TraktClient(Constants.TraktId);
-            Actors = new OptimizedObservableCollection<TraktPerson>();
+            Actors = new OptimizedObservableCollection<TraktCastMember>();
         }
 
         public TraktShow Show
@@ -28,7 +29,7 @@ namespace Tracky.ViewModels
             set { Set(ref _show, value); }
         }
 
-        public OptimizedObservableCollection<TraktPerson> Actors { get; set; }
+        public OptimizedObservableCollection<TraktCastMember> Actors { get; set; }
 
         public Task OnNavigatedFrom(TraktShow e)
         {
@@ -44,14 +45,8 @@ namespace Tracky.ViewModels
 
         private async Task LoadActorsAsync()
         {
-            var showPeople = await _client.Shows.GetShowPeopleAsync(Show.Ids.Trakt.ToString());
-            var tasks = showPeople.Cast
-                .Select(cm => cm.Person)
-                .Select(p => _client.People.GetPersonAsync(p.Ids.Trakt.ToString(), new TraktExtendedOption {Images = true}))
-                .ToList();
-
-            var actors = await Task.WhenAll(tasks);
-            Actors.AddRange(actors);
+            var showPeople = await _client.Shows.GetShowPeopleAsync(Show.Ids.Trakt.ToString(), new TraktExtendedOption {Full = true, Images = true});
+            Actors.AddRange(showPeople.Cast);
         }
     }
 }

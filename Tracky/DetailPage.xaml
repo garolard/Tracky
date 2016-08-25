@@ -6,23 +6,33 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uwp="using:Microsoft.Toolkit.Uwp.UI.Controls"
-    xmlns:people="using:TraktApiSharp.Objects.Get.People"
+    xmlns:trakt="using:TraktApiSharp.Objects.Basic"
     mc:Ignorable="d"
     DataContext="{StaticResource Detail}">
 
     <Page.Resources>
-        <DataTemplate x:Key="ActorTemplate" x:DataType="people:TraktPerson">
+        <DataTemplate x:Key="ActorTemplate" x:DataType="trakt:TraktCastMember">
             <RelativePanel Width="140"
-                           Height="200">
-                <uwp:ImageEx IsCacheEnabled="True"
-                             Source="{x:Bind Images.Headshot.Medium}"
-                             Stretch="UniformToFill"/>
-                <TextBlock Text="{x:Bind Name}"
-                           Style="{ThemeResource BodyTextBlockStyle}"
+                           MaxHeight="248">
+                <uwp:ImageEx x:Name="ActorImage"
+                             IsCacheEnabled="True"
+                             Source="{x:Bind Person.Images.Headshot.Medium}"
+                             Stretch="UniformToFill"
+                             Width="140"
+                             Height="200"/>
+                <TextBlock x:Name="ActorName"
+                           Text="{x:Bind Person.Name}"
+                           Style="{ThemeResource CaptionTextBlockStyle}"
                            Foreground="White"
-                           Margin="8,0,0,4"
+                           Margin="0,4,0,0"
                            RelativePanel.AlignLeftWithPanel="True"
-                           RelativePanel.AlignBottomWithPanel="True"/>
+                           RelativePanel.Below="ActorImage"/>
+                <TextBlock Text="{x:Bind Character}"
+                           Style="{ThemeResource CaptionTextBlockStyle}"
+                           Foreground="#93ffffff"
+                           Margin="0,4,0,4"
+                           RelativePanel.AlignLeftWithPanel="True"
+                           RelativePanel.Below="ActorName"/>
             </RelativePanel>
         </DataTemplate>
     </Page.Resources>
@@ -35,8 +45,13 @@
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Stretch" />
         <Border Background="#A5000000"/>
-        <ScrollViewer>
+        <ScrollViewer VerticalScrollBarVisibility="Hidden">
             <RelativePanel x:Name="ContentRoot">
+                <RelativePanel.ChildrenTransitions>
+                    <TransitionCollection>
+                        <EntranceThemeTransition IsStaggeringEnabled="True"/>
+                    </TransitionCollection>
+                </RelativePanel.ChildrenTransitions>
                 <Image x:Name="Poster"
                        Margin="40,80,0,0"
                        Source="{Binding Show.Images.Poster.Medium}"
@@ -138,7 +153,14 @@
                           MaxWidth="800"
                           HorizontalAlignment="Stretch"
                           RelativePanel.Below="ActorsHeader"
-                          RelativePanel.AlignLeftWith="Title"/>
+                          RelativePanel.AlignLeftWith="Title">
+                    <GridView.Transitions>
+                        <TransitionCollection>
+                            <EntranceThemeTransition IsStaggeringEnabled="True"/>
+                            <AddDeleteThemeTransition/>
+                        </TransitionCollection>
+                    </GridView.Transitions>
+                </GridView>
             </RelativePanel>
         </ScrollViewer>
     </Grid>

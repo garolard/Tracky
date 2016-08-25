@@ -46,8 +46,6 @@ namespace Tracky.ViewModels
         
         public ICommand PerformSearchQueryCommand { get; private set; }
 
-        public ICommand NavigateToShowCommand { get; private set; }
-
         private async Task PullSearchSuggestionAsync(bool userChangedQuery)
         {
             if (!userChangedQuery) return;
