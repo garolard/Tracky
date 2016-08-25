@@ -24,10 +24,7 @@ namespace Tracky
         public MainPage()
         {
             this.InitializeComponent();
-            //Shows = new ObservableCollection<TraktShow>();
         }
-
-        //public ObservableCollection<TraktShow> Shows { get; set; }
 
         private void GridElement_OnTapped(object sender, TappedRoutedEventArgs e)
         {

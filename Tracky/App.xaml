@@ -8,6 +8,7 @@
 
     <Application.Resources>
         <vm:MainViewModel x:Key="Main"/>
+        <vm:DetailViewModel x:Key="Detail"/>
         <local:RatingsConverter x:Key="Ratings"/>
         <local:VotesConverter x:Key="Votes"/>
     </Application.Resources>
