@@ -7,10 +7,12 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uwp="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:trakt="using:TraktApiSharp.Objects.Basic"
+    xmlns:converter="using:Tracky.UI.Converters"
     mc:Ignorable="d"
     DataContext="{StaticResource Detail}">
 
     <Page.Resources>
+        <converter:RuntimeConverter x:Key="Runtime"/>
         <DataTemplate x:Key="ActorTemplate" x:DataType="trakt:TraktCastMember">
             <RelativePanel Width="140"
                            MaxHeight="248">
@@ -29,12 +31,22 @@
                            RelativePanel.Below="ActorImage"/>
                 <TextBlock Text="{x:Bind Character}"
                            Style="{ThemeResource CaptionTextBlockStyle}"
-                           Foreground="#93ffffff"
+                           Foreground="#A9ffffff"
                            Margin="0,4,0,4"
                            RelativePanel.AlignLeftWithPanel="True"
                            RelativePanel.Below="ActorName"/>
             </RelativePanel>
         </DataTemplate>
+        <Style x:Key="HeaderedTextBlockHeaderStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyTextBlockStyle}">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Foreground" Value="#A9FFFFFF"/>
+        </Style>
+        <Style x:Key="HeaderedTextBlockTextStyle" TargetType="TextBlock" BasedOn="{StaticResource BodyTextBlockStyle}">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Margin" Value="4,0,0,0"/>
+        </Style>
     </Page.Resources>
     
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -81,13 +93,10 @@
                       Margin="40,0,0,0"
                       RelativePanel.Below="Title"
                       RelativePanel.AlignLeftWith="Title">
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition />
-                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
 
                     <FontIcon Grid.Column="0"
@@ -114,7 +123,7 @@
                                Foreground="White"
                                FontWeight="Bold"
                                FontSize="14"
-                               Grid.Row="0"
+                               VerticalAlignment="Center"
                                Grid.Column="1" />
 
                     <TextBlock x:Name="Votes"
@@ -124,10 +133,22 @@
                                Foreground="White"
                                Opacity=".8"
                                FontSize="11"
-                               Grid.Row="1"
-                               Grid.Column="1" />
+                               VerticalAlignment="Center"
+                               TextAlignment="Center"
+                               Grid.Column="2" />
                 </Grid>
 
+                <uwp:HeaderedTextBlock x:Name="Runtime"
+                                       Margin="32,0,0,0"
+                                       Header="RUNTIME"
+                                       Text="{Binding Show.Runtime, Converter={StaticResource Runtime}}"
+                                       HeaderStyle="{StaticResource HeaderedTextBlockHeaderStyle}"
+                                       TextStyle="{StaticResource HeaderedTextBlockTextStyle}"
+                                       VerticalContentAlignment="Bottom"
+                                       Orientation="Horizontal"
+                                       RelativePanel.RightOf="RatingGrid"
+                                       RelativePanel.AlignVerticalCenterWith="RatingGrid"/>
+                
                 <TextBlock x:Name="Overview"
                            Text="{Binding Show.Overview}"
                            Style="{ThemeResource BodyTextBlockStyle}"
