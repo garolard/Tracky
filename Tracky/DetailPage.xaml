@@ -55,10 +55,12 @@
                      Source="{Binding Show.Images.FanArt.Full}"
                      Stretch="UniformToFill"
                      HorizontalAlignment="Stretch"
-                     VerticalAlignment="Stretch" />
+                     VerticalAlignment="Stretch"/>
         <Border Background="#A5000000"/>
         <ScrollViewer VerticalScrollBarVisibility="Hidden">
-            <RelativePanel x:Name="ContentRoot">
+            <RelativePanel x:Name="ContentRoot"
+                           VerticalAlignment="Stretch"
+                           HorizontalAlignment="Stretch">
                 <RelativePanel.ChildrenTransitions>
                     <TransitionCollection>
                         <EntranceThemeTransition FromVerticalOffset="80" 
@@ -173,7 +175,7 @@
                           ItemsSource="{Binding Actors}"
                           ItemTemplate="{StaticResource ActorTemplate}"
                           Margin="40,20,0,0"
-                          MaxWidth="800"
+                          MaxWidth="1300"
                           HorizontalAlignment="Stretch"
                           RelativePanel.Below="ActorsHeader"
                           RelativePanel.AlignLeftWith="Title"/>
