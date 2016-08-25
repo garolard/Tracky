@@ -5,7 +5,8 @@
     "Microsoft.Toolkit.Uwp.UI": "1.0.0",
     "Microsoft.Toolkit.Uwp.UI.Animations": "1.0.0",
     "Microsoft.Toolkit.Uwp.UI.Controls": "1.0.0",
-    "TraktApiSharp": "0.2.0"
+    "Microsoft.Xaml.Behaviors.Uwp.Managed": "1.1.0",
+    "TraktApiSharp": "0.3.0"
   },
   "frameworks": {
     "uap10.0": {}

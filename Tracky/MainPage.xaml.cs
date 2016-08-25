@@ -20,16 +20,14 @@ namespace Tracky
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private readonly TraktClient _client;
 
         public MainPage()
         {
             this.InitializeComponent();
-            _client = new TraktClient(Constants.TraktId);
-            Shows = new ObservableCollection<TraktShow>();
+            //Shows = new ObservableCollection<TraktShow>();
         }
-        
-        public ObservableCollection<TraktShow> Shows { get; set; }
+
+        //public ObservableCollection<TraktShow> Shows { get; set; }
 
         private void GridElement_OnTapped(object sender, TappedRoutedEventArgs e)
         {
@@ -44,67 +42,6 @@ namespace Tracky
             }
 
             Frame.Navigate(typeof(DetailPage), show);
-        }
-
-        private async void SearchBox_OnTextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
-        {
-            if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
-            {
-                var query = sender.Text;
-                if (string.IsNullOrEmpty(query))
-                {
-                    SearchBox.ItemsSource = new TraktShow[] { new TraktShow() { Title = "No results" } };
-                    return;
-                }
-
-                var searchResults = await _client.Search.GetTextQueryResultsAsync(TraktSearchResultType.Show, query);
-
-                var tasks = searchResults
-                    .Select(result => result.Show.Ids.Trakt.ToString())
-                    .Select(showId => _client.Shows.GetShowAsync(showId, new TraktExtendedOption { Full = true, Images = true }))
-                    .ToList();
-
-                var fullShows = await Task.WhenAll(tasks);
-                if (fullShows.Any())
-                    SearchBox.ItemsSource = fullShows;
-                else
-                    SearchBox.ItemsSource = new TraktShow[] {new TraktShow() {Title = "No results"}};
-            }
-        }
-
-        private void SearchBox_OnSuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
-        {
-            var selectedShow = (TraktShow)args.SelectedItem;
-            sender.Text = selectedShow.Title;
-        }
-
-        private async void SearchBox_OnQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
-        {
-            var query = string.Empty;
-
-            if (args.ChosenSuggestion != null)
-            {
-                var selectedShow = (TraktShow) args.ChosenSuggestion;
-                query = selectedShow.Title;
-            }
-            else
-            {
-                query = sender.Text;
-            }
-
-            var searchResults = await _client.Search.GetTextQueryResultsAsync(TraktSearchResultType.Show, query);
-
-            var tasks = searchResults
-                .Select(result => result.Show.Ids.Trakt.ToString())
-                .Select(showId => _client.Shows.GetShowAsync(showId, new TraktExtendedOption { Full = true, Images = true }))
-                .ToList();
-
-            var fullShows = await Task.WhenAll(tasks);
-            Shows.Clear();
-            foreach (var show in fullShows)
-            {
-                Shows.Add(show);
-            }
         }
     }
 }

@@ -104,6 +104,10 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RatingsConverter.cs" />
+    <Compile Include="UI\Converters\AutoSuggestChosenSuggestionConverter.cs" />
+    <Compile Include="UI\Converters\AutoSuggestQueryConverter.cs" />
+    <Compile Include="UI\Converters\AutoSuggestTextConverter.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="VotesConverter.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -137,6 +141,13 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\GeekyTool\src\GeekyTool.Core\GeekyTool.Core.csproj">
+      <Project>{113dbc6b-abdf-4f6e-b55b-d4f3efa38da7}</Project>
+      <Name>GeekyTool.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

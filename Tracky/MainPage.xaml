@@ -7,7 +7,11 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uwp="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:trakt="using:TraktApiSharp.Objects.Get.Shows"
-    mc:Ignorable="d" DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:converter="using:Tracky.UI.Converters"
+    mc:Ignorable="d" 
+    DataContext="{StaticResource Main}">
 
     <Page.Transitions>
         <TransitionCollection>
@@ -20,8 +24,11 @@
     </Page.Transitions>
     
     <Page.Resources>
+        <converter:AutoSuggestTextConverter x:Key="TextChangedConverter"/>
+        <converter:AutoSuggestChosenSuggestionConverter x:Key="SuggestionChosenConverter"/>
+        <converter:AutoSuggestQueryConverter x:Key="QuerySubmitedConverter"/>
         <DataTemplate x:Key="ShowTemplate" x:DataType="trakt:TraktShow">
-            <Grid Background="LightGray" 
+            <Grid Background="LightGray"
                   Tapped="GridElement_OnTapped">
                 <uwp:ImageEx Source="{Binding Images.Poster.Medium}"
                                          Stretch="UniformToFill"
@@ -46,14 +53,27 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <AutoSuggestBox x:Name="SearchBox"
+                        ItemsSource="{Binding SearchSuggestions}"
+                        Text="{Binding SearchQuery, Mode=TwoWay}"
                         Width="240"
                         Margin="20"
                         HorizontalAlignment="Left"
                         DisplayMemberPath="Title"
-                        QueryIcon="Find"
-                        TextChanged="SearchBox_OnTextChanged"
-                        SuggestionChosen="SearchBox_OnSuggestionChosen"
-                        QuerySubmitted="SearchBox_OnQuerySubmitted"/>
+                        TextMemberPath="Title"
+                        QueryIcon="Find">
+            <interactivity:Interaction.Behaviors>
+                <interactivity:BehaviorCollection>
+                    <core:EventTriggerBehavior EventName="TextChanged">
+                        <core:InvokeCommandAction Command="{Binding PullSearchSuggestionsCommand}"
+                                                  InputConverter="{StaticResource TextChangedConverter}"/>
+                    </core:EventTriggerBehavior>
+                    <core:EventTriggerBehavior EventName="QuerySubmitted">
+                        <core:InvokeCommandAction Command="{Binding PerformSearchQueryCommand}"
+                                                  InputConverter="{StaticResource QuerySubmitedConverter}"/>
+                    </core:EventTriggerBehavior>
+                </interactivity:BehaviorCollection>
+            </interactivity:Interaction.Behaviors>
+        </AutoSuggestBox>
         <uwp:AdaptiveGridView ItemsSource="{Binding Shows}"
                               ItemTemplate="{StaticResource ShowTemplate}"
                               ItemHeight="400"
