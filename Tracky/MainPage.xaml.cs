@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Navigation;
 using Microsoft.Toolkit.Uwp.UI;
 using Microsoft.Toolkit.Uwp.UI.Controls;
+using Tracky.ViewModels;
 using TraktApiSharp;
 using TraktApiSharp.Enums;
 using TraktApiSharp.Objects.Get.Shows;
@@ -24,19 +26,24 @@ namespace Tracky
         public MainPage()
         {
             this.InitializeComponent();
+            NavigationCacheMode = NavigationCacheMode.Enabled;
+        }
+
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+
+            if (e.NavigationMode == NavigationMode.Back)
+            {
+                var ctx = DataContext as MainViewModel;
+                await ctx.ClearStateAsync();
+            }
         }
 
         private void GridElement_OnTapped(object sender, TappedRoutedEventArgs e)
         {
             var element = sender as Grid;
-            var posterImage = element.FindDescendant<ImageEx>();
             var show = element.DataContext as TraktShow;
-
-            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.Xaml.Media.Animation.ConnectedAnimationService"))
-            {
-                var service = ConnectedAnimationService.GetForCurrentView();
-                service.PrepareToAnimate("SelectedShow", posterImage);
-            }
 
             Frame.Navigate(typeof(DetailPage), show);
         }

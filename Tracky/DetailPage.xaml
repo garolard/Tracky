@@ -61,17 +61,19 @@
             <RelativePanel x:Name="ContentRoot">
                 <RelativePanel.ChildrenTransitions>
                     <TransitionCollection>
-                        <EntranceThemeTransition IsStaggeringEnabled="True"/>
+                        <EntranceThemeTransition FromVerticalOffset="80" 
+                                                 IsStaggeringEnabled="True"/>
                     </TransitionCollection>
                 </RelativePanel.ChildrenTransitions>
-                <Image x:Name="Poster"
-                       Margin="40,80,0,0"
-                       Source="{Binding Show.Images.Poster.Medium}"
-                       Stretch="UniformToFill"
-                       Width="260"
-                       Height="400"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Top" />
+                <uwp:ImageEx x:Name="Poster"
+                             Margin="40,80,0,0"
+                             IsCacheEnabled="True"
+                             Source="{Binding Show.Images.Poster.Medium}"
+                             Stretch="UniformToFill"
+                             Width="260"
+                             Height="400"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Top" />
                 <TextBlock x:Name="Title"
                            Text="{Binding Show.Title}"
                            Style="{ThemeResource HeaderTextBlockStyle}"
@@ -174,14 +176,7 @@
                           MaxWidth="800"
                           HorizontalAlignment="Stretch"
                           RelativePanel.Below="ActorsHeader"
-                          RelativePanel.AlignLeftWith="Title">
-                    <GridView.Transitions>
-                        <TransitionCollection>
-                            <EntranceThemeTransition IsStaggeringEnabled="True"/>
-                            <AddDeleteThemeTransition/>
-                        </TransitionCollection>
-                    </GridView.Transitions>
-                </GridView>
+                          RelativePanel.AlignLeftWith="Title"/>
             </RelativePanel>
         </ScrollViewer>
     </Grid>

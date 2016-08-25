@@ -25,24 +25,22 @@
     
     <Page.Resources>
         <converter:AutoSuggestTextConverter x:Key="TextChangedConverter"/>
-        <converter:AutoSuggestChosenSuggestionConverter x:Key="SuggestionChosenConverter"/>
         <converter:AutoSuggestQueryConverter x:Key="QuerySubmitedConverter"/>
         <DataTemplate x:Key="ShowTemplate" x:DataType="trakt:TraktShow">
-            <Grid Background="LightGray"
-                  Tapped="GridElement_OnTapped">
-                <uwp:ImageEx Source="{Binding Images.Poster.Medium}"
-                                         Stretch="UniformToFill"
-                                         PlaceholderSource="Assets/trakt-icon.png"
-                                         PlaceholderStretch="None"
-                                         IsCacheEnabled="True"
-                                         VerticalAlignment="Stretch"
-                                         HorizontalAlignment="Stretch"/>
+            <Grid Background="LightGray" Tapped="GridElement_OnTapped">
+                <uwp:ImageEx Source="{x:Bind Images.Poster.Medium}"
+                             Stretch="UniformToFill"
+                             PlaceholderSource="Assets/trakt-icon.png"
+                             PlaceholderStretch="None"
+                             IsCacheEnabled="True"
+                             VerticalAlignment="Stretch"
+                             HorizontalAlignment="Stretch"/>
                 <TextBlock Text="{x:Bind Title}"
-                                       Style="{StaticResource SubtitleTextBlockStyle}"
-                                       Margin="12"
-                                       Foreground="White"
-                                       VerticalAlignment="Bottom"
-                                       HorizontalAlignment="Left"/>
+                           Style="{StaticResource SubtitleTextBlockStyle}"
+                           Margin="12"
+                           Foreground="White"
+                           VerticalAlignment="Bottom"
+                           HorizontalAlignment="Left"/>
             </Grid>
         </DataTemplate>
     </Page.Resources>
@@ -82,8 +80,10 @@
                               Grid.Row="1">
             <uwp:AdaptiveGridView.Transitions>
                 <TransitionCollection>
-                    <EntranceThemeTransition IsStaggeringEnabled="True"/>
+                    <EntranceThemeTransition FromVerticalOffset="60"
+                                             IsStaggeringEnabled="True"/>
                     <AddDeleteThemeTransition/>
+                    <ContentThemeTransition/>
                 </TransitionCollection>
             </uwp:AdaptiveGridView.Transitions>
         </uwp:AdaptiveGridView>

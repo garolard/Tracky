@@ -1,4 +1,5 @@
-﻿using Windows.UI.Xaml;
+﻿using System;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
@@ -23,20 +24,10 @@ namespace Tracky
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
+
             var show = (TraktShow)e.Parameter;
             var ctx = this.DataContext as DetailViewModel;
             await ctx.OnNavigatedTo(show);
-
-            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.Xaml.Media.Animation.ConnectedAnimationService"))
-            {
-                var service = ConnectedAnimationService.GetForCurrentView();
-                service.GetAnimation("SelectedShow").TryStart(this.Poster);
-            }
         }
-
-        //private async void Background_OnImageOpened(object sender, RoutedEventArgs e)
-        //{
-        //    await Background.Blur(duration: 500, value: 5, delay: 200).StartAsync();
-        //}
     }
 }

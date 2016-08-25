@@ -4,6 +4,7 @@ using System.Windows.Input;
 using Windows.UI.Xaml.Controls;
 using GeekyTool.Base;
 using GeekyTool.Helpers;
+using GeekyTool.Services;
 using TraktApiSharp;
 using TraktApiSharp.Enums;
 using TraktApiSharp.Objects.Get.Shows;
@@ -45,6 +46,13 @@ namespace Tracky.ViewModels
         public ICommand PullSearchSuggestionsCommand { get; private set; }
         
         public ICommand PerformSearchQueryCommand { get; private set; }
+
+        public async Task ClearStateAsync()
+        {
+            SearchSuggestions.Clear();
+            Shows.Clear();
+            await PerformSearchQueryAsync(null);
+        }
 
         private async Task PullSearchSuggestionAsync(bool userChangedQuery)
         {
