@@ -5,6 +5,7 @@ using Windows.UI.Core;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Microsoft.Toolkit.Uwp.UI;
 
 namespace Tracky
 {
@@ -71,6 +72,9 @@ namespace Tracky
                 // Ensure the current window is active
                 Window.Current.Activate();
             }
+
+            // Cache images for only 6 hours
+            ImageCache.CacheDuration = TimeSpan.FromHours(6);
         }
 
         /// <summary>

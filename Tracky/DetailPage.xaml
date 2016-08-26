@@ -7,12 +7,14 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:uwp="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:trakt="using:TraktApiSharp.Objects.Basic"
+    xmlns:episode="using:TraktApiSharp.Objects.Get.Shows.Episodes"
     xmlns:converter="using:Tracky.UI.Converters"
     mc:Ignorable="d"
     DataContext="{StaticResource Detail}">
 
     <Page.Resources>
         <converter:RuntimeConverter x:Key="Runtime"/>
+        <converter:EpisodeTitleConverter x:Key="EpisodeTitle"/>
         <DataTemplate x:Key="ActorTemplate" x:DataType="trakt:TraktCastMember">
             <RelativePanel Width="140"
                            MaxHeight="248">
@@ -181,12 +183,74 @@
                               Margin="40,20,0,0"
                               MaxWidth="1000"
                               HorizontalAlignment="Stretch"
+                              SelectionMode="None"
                               RelativePanel.Below="ActorsHeader"
                               RelativePanel.AlignLeftWith="Title" />
+                    
+                    <TextBlock x:Name="RecentEpisodes"
+                               Text="Recent episodes"
+                               Style="{ThemeResource SubheaderTextBlockStyle}"
+                               Margin="40,44,0,0"
+                               Foreground="White"
+                               RelativePanel.Below="ActorsGrid"
+                               RelativePanel.AlignLeftWith="Title"/>
+                    
+                    <ListView x:Name="EpisodesList"
+                              ItemsSource="{Binding RecentEpisodes}"
+                              MaxWidth="1000"
+                              Margin="40,20,0,20"
+                              SelectionMode="None"
+                              RelativePanel.Below="RecentEpisodes"
+                              RelativePanel.AlignLeftWith="Title">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="Margin" Value="0"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="episode:TraktEpisode">
+                                <Grid x:Name="Episodegrid"
+                                      Width="260" 
+                                      Height="140"
+                                      Margin="0,0,20,0"
+                                      Tag="{Binding}">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <uwp:ImageEx IsCacheEnabled="True"
+                                                 Source="{x:Bind Images.Screenshot.Thumb}"
+                                                 Stretch="UniformToFill"
+                                                 HorizontalAlignment="Stretch"
+                                                 VerticalAlignment="Stretch"
+                                                 Grid.RowSpan="2"/>
+                                    <Border Background="#54000000"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Stretch"
+                                            Grid.Row="1">
+                                        <TextBlock Text="{Binding ElementName=Episodegrid, Path=Tag, Converter={StaticResource EpisodeTitle}}"
+                                                   Style="{ThemeResource BodyTextBlockStyle}"
+                                                   Margin="8,4"
+                                                   Foreground="White"
+                                                   FontWeight="Bold"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Left"/>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                 </RelativePanel>
             </ScrollViewer>
         </Grid>
 
+        <!-- Custom TitleBar -->
         <Grid x:Name="TitleBar" Grid.Row="0" Background="Transparent">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
