@@ -50,134 +50,169 @@
     </Page.Resources>
     
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <uwp:ImageEx x:Name="Background"
-                     IsCacheEnabled="True"
-                     Source="{Binding Show.Images.FanArt.Full}"
-                     Stretch="UniformToFill"
-                     HorizontalAlignment="Stretch"
-                     VerticalAlignment="Stretch" />
-        <Border Background="#A5000000"/>
-        <ScrollViewer VerticalScrollBarVisibility="Hidden">
-            <RelativePanel x:Name="ContentRoot">
-                <RelativePanel.ChildrenTransitions>
-                    <TransitionCollection>
-                        <EntranceThemeTransition FromVerticalOffset="80" 
-                                                 IsStaggeringEnabled="True"/>
-                    </TransitionCollection>
-                </RelativePanel.ChildrenTransitions>
-                <uwp:ImageEx x:Name="Poster"
-                             Margin="40,80,0,0"
-                             IsCacheEnabled="True"
-                             Source="{Binding Show.Images.Poster.Medium}"
-                             Stretch="UniformToFill"
-                             Width="260"
-                             Height="400"
-                             HorizontalAlignment="Left"
-                             VerticalAlignment="Top" />
-                <TextBlock x:Name="Title"
-                           Text="{Binding Show.Title}"
-                           Style="{ThemeResource HeaderTextBlockStyle}"
-                           Margin="40,64,0,0"
-                           Foreground="White"
-                           RelativePanel.RightOf="Poster"
-                           RelativePanel.AlignTopWith="Poster" />
-                <TextBlock x:Name="Year"
-                           Text="{Binding Show.Year}"
-                           Style="{ThemeResource CaptionTextBlockStyle}"
-                           Margin="8,0,0,8"
-                           Foreground="White"
-                           FontSize="16"
-                           Opacity=".8"
-                           RelativePanel.RightOf="Title"
-                           RelativePanel.AlignBottomWith="Title" />
-
-                <Grid x:Name="RatingGrid"
-                      Margin="40,0,0,0"
-                      RelativePanel.Below="Title"
-                      RelativePanel.AlignLeftWith="Title">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-
-                    <FontIcon Grid.Column="0"
-                              Grid.ColumnSpan="1"
-                              Grid.Row="0"
-                              Grid.RowSpan="2"
-                              FontFamily="Segoe MDL2 Assets"
-                              FontSize="24"
-                              Glyph="&#xE00B;"
-                              Foreground="DarkRed" />
-                    <FontIcon Grid.Column="0"
-                              Grid.ColumnSpan="1"
-                              Grid.Row="0"
-                              Grid.RowSpan="2"
-                              Opacity=".3"
-                              FontFamily="Segoe MDL2 Assets"
-                              FontSize="24"
-                              Glyph="&#xE006;" />
-
-                    <TextBlock x:Name="Rating"
-                               Text="{Binding Show.Rating, Converter={StaticResource Ratings}}"
-                               Style="{ThemeResource BodyTextBlockStyle}"
-                               Margin="8,0,0,0"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0" Grid.RowSpan="2">
+            <uwp:ImageEx x:Name="Background"
+                         IsCacheEnabled="True"
+                         Source="{Binding Show.Images.FanArt.Full}"
+                         Stretch="UniformToFill"
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Stretch" />
+            <Border Background="#A5000000" />
+            <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                <RelativePanel x:Name="ContentRoot">
+                    <RelativePanel.ChildrenTransitions>
+                        <TransitionCollection>
+                            <EntranceThemeTransition FromVerticalOffset="80"
+                                                     IsStaggeringEnabled="True" />
+                        </TransitionCollection>
+                    </RelativePanel.ChildrenTransitions>
+                    <uwp:ImageEx x:Name="Poster"
+                                 Margin="80,80,0,0"
+                                 IsCacheEnabled="True"
+                                 Source="{Binding Show.Images.Poster.Medium}"
+                                 Stretch="UniformToFill"
+                                 Width="260"
+                                 Height="400"
+                                 HorizontalAlignment="Left"
+                                 VerticalAlignment="Top" />
+                    <TextBlock x:Name="Title"
+                               Text="{Binding Show.Title}"
+                               Style="{ThemeResource HeaderTextBlockStyle}"
+                               Margin="40,64,0,0"
                                Foreground="White"
-                               FontWeight="Bold"
-                               FontSize="14"
-                               VerticalAlignment="Center"
-                               Grid.Column="1" />
-
-                    <TextBlock x:Name="Votes"
-                               Text="{Binding Show.Votes, Converter={StaticResource Votes}}"
-                               Style="{ThemeResource BodyTextBlockStyle}"
-                               Margin="8,0,0,0"
+                               RelativePanel.RightOf="Poster"
+                               RelativePanel.AlignTopWith="Poster" />
+                    <TextBlock x:Name="Year"
+                               Text="{Binding Show.Year}"
+                               Style="{ThemeResource CaptionTextBlockStyle}"
+                               Margin="8,0,0,8"
                                Foreground="White"
+                               FontSize="16"
                                Opacity=".8"
-                               FontSize="11"
-                               VerticalAlignment="Center"
-                               TextAlignment="Center"
-                               Grid.Column="2" />
-                </Grid>
+                               RelativePanel.RightOf="Title"
+                               RelativePanel.AlignBottomWith="Title" />
 
-                <uwp:HeaderedTextBlock x:Name="Runtime"
-                                       Margin="32,0,0,0"
-                                       Header="RUNTIME"
-                                       Text="{Binding Show.Runtime, Converter={StaticResource Runtime}}"
-                                       HeaderStyle="{StaticResource HeaderedTextBlockHeaderStyle}"
-                                       TextStyle="{StaticResource HeaderedTextBlockTextStyle}"
-                                       VerticalContentAlignment="Bottom"
-                                       Orientation="Horizontal"
-                                       RelativePanel.RightOf="RatingGrid"
-                                       RelativePanel.AlignVerticalCenterWith="RatingGrid"/>
-                
-                <TextBlock x:Name="Overview"
-                           Text="{Binding Show.Overview}"
-                           Style="{ThemeResource BodyTextBlockStyle}"
-                           Margin="40,40,20,0"
-                           Foreground="White"
-                           MaxWidth="800"
-                           TextWrapping="Wrap"
-                           RelativePanel.Below="RatingGrid"
-                           RelativePanel.AlignLeftWith="Title" />
+                    <Grid x:Name="RatingGrid"
+                          Margin="40,0,0,0"
+                          RelativePanel.Below="Title"
+                          RelativePanel.AlignLeftWith="Title">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
 
-                <TextBlock x:Name="ActorsHeader"
-                           Text="Cast"
-                           Style="{ThemeResource SubheaderTextBlockStyle}"
-                           Margin="40,64,0,0"
-                           Foreground="White"
-                           RelativePanel.Below="Overview"
-                           RelativePanel.AlignLeftWith="Title"/>
-                
-                <GridView x:Name="ActorsGrid"
-                          ItemsSource="{Binding Actors}"
-                          ItemTemplate="{StaticResource ActorTemplate}"
-                          Margin="40,20,0,0"
-                          MaxWidth="800"
-                          HorizontalAlignment="Stretch"
-                          RelativePanel.Below="ActorsHeader"
-                          RelativePanel.AlignLeftWith="Title"/>
-            </RelativePanel>
-        </ScrollViewer>
+                        <FontIcon Grid.Column="0"
+                                  Grid.ColumnSpan="1"
+                                  Grid.Row="0"
+                                  Grid.RowSpan="2"
+                                  FontFamily="Segoe MDL2 Assets"
+                                  FontSize="24"
+                                  Glyph="&#xE00B;"
+                                  Foreground="DarkRed" />
+                        <FontIcon Grid.Column="0"
+                                  Grid.ColumnSpan="1"
+                                  Grid.Row="0"
+                                  Grid.RowSpan="2"
+                                  Opacity=".3"
+                                  FontFamily="Segoe MDL2 Assets"
+                                  FontSize="24"
+                                  Glyph="&#xE006;" />
+
+                        <TextBlock x:Name="Rating"
+                                   Text="{Binding Show.Rating, Converter={StaticResource Ratings}}"
+                                   Style="{ThemeResource BodyTextBlockStyle}"
+                                   Margin="8,0,0,0"
+                                   Foreground="White"
+                                   FontWeight="Bold"
+                                   FontSize="14"
+                                   VerticalAlignment="Center"
+                                   Grid.Column="1" />
+
+                        <TextBlock x:Name="Votes"
+                                   Text="{Binding Show.Votes, Converter={StaticResource Votes}}"
+                                   Style="{ThemeResource BodyTextBlockStyle}"
+                                   Margin="8,0,0,0"
+                                   Foreground="White"
+                                   Opacity=".8"
+                                   FontSize="11"
+                                   VerticalAlignment="Center"
+                                   TextAlignment="Center"
+                                   Grid.Column="2" />
+                    </Grid>
+
+                    <uwp:HeaderedTextBlock x:Name="Runtime"
+                                           Margin="32,0,0,0"
+                                           Header="RUNTIME"
+                                           Text="{Binding Show.Runtime, Converter={StaticResource Runtime}}"
+                                           HeaderStyle="{StaticResource HeaderedTextBlockHeaderStyle}"
+                                           TextStyle="{StaticResource HeaderedTextBlockTextStyle}"
+                                           VerticalContentAlignment="Bottom"
+                                           Orientation="Horizontal"
+                                           RelativePanel.RightOf="RatingGrid"
+                                           RelativePanel.AlignVerticalCenterWith="RatingGrid" />
+
+                    <TextBlock x:Name="Overview"
+                               Text="{Binding Show.Overview}"
+                               Style="{ThemeResource BodyTextBlockStyle}"
+                               Margin="40,40,20,0"
+                               Foreground="White"
+                               MaxWidth="800"
+                               TextWrapping="Wrap"
+                               RelativePanel.Below="RatingGrid"
+                               RelativePanel.AlignLeftWith="Title" />
+
+                    <TextBlock x:Name="ActorsHeader"
+                               Text="Cast"
+                               Style="{ThemeResource SubheaderTextBlockStyle}"
+                               Margin="40,64,0,0"
+                               Foreground="White"
+                               RelativePanel.Below="Overview"
+                               RelativePanel.AlignLeftWith="Title" />
+
+                    <GridView x:Name="ActorsGrid"
+                              ItemsSource="{Binding Actors}"
+                              ItemTemplate="{StaticResource ActorTemplate}"
+                              Margin="40,20,0,0"
+                              MaxWidth="1000"
+                              HorizontalAlignment="Stretch"
+                              RelativePanel.Below="ActorsHeader"
+                              RelativePanel.AlignLeftWith="Title" />
+                </RelativePanel>
+            </ScrollViewer>
+        </Grid>
+
+        <Grid x:Name="TitleBar" Grid.Row="0" Background="Transparent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="BackButton" 
+                    Style="{ThemeResource NavigationBackButtonNormalStyle}"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    Foreground="White"
+                    Click="BackButton_OnClick">
+            </Button>
+
+            <Grid x:Name="MainTitleBar" Background="Transparent" Grid.Column="1">
+                <TextBlock Text="{Binding Show.Title}"
+                           VerticalAlignment="Center"
+                           FontSize="12"
+                           FontFamily="Segoe UI"
+                           FontWeight="Normal"
+                           Margin="10,0"
+                           Foreground="#A9FFFFFF"/>
+            </Grid>
+
+            <Grid x:Name="RightMask" Grid.Column="2"></Grid>
+        </Grid>
     </Grid>
 </Page>
