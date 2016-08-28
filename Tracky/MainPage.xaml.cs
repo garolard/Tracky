@@ -55,12 +55,9 @@ namespace Tracky
             }
         }
 
-        private void GridElement_OnTapped(object sender, TappedRoutedEventArgs e)
+        private void AdaptiveGridView_OnItemClick(object sender, ItemClickEventArgs e)
         {
-            var element = sender as Grid;
-            var show = element.DataContext as TraktShow;
-
-            Frame.Navigate(typeof(DetailPage), show);
+            Frame.Navigate(typeof(DetailPage), e.ClickedItem);
         }
     }
 }

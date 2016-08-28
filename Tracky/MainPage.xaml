@@ -27,7 +27,7 @@
         <converter:AutoSuggestTextConverter x:Key="TextChangedConverter"/>
         <converter:AutoSuggestQueryConverter x:Key="QuerySubmitedConverter"/>
         <DataTemplate x:Key="ShowTemplate" x:DataType="trakt:TraktShow">
-            <Grid Background="LightGray" Tapped="GridElement_OnTapped">
+            <Grid Background="LightGray">
                 <uwp:ImageEx Source="{x:Bind Images.Poster.Medium}"
                              Stretch="UniformToFill"
                              PlaceholderSource="Assets/trakt-icon.png"
@@ -75,6 +75,7 @@
         <uwp:AdaptiveGridView ItemsSource="{Binding Shows}"
                               ItemTemplate="{StaticResource ShowTemplate}"
                               ItemHeight="400"
+                              ItemClick="AdaptiveGridView_OnItemClick"
                               DesiredWidth="260"
                               HorizontalContentAlignment="Center"
                               Grid.Row="1">
