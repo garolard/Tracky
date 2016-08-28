@@ -10,8 +10,7 @@
     xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     xmlns:converter="using:Tracky.UI.Converters"
-    mc:Ignorable="d" 
-    DataContext="{StaticResource Main}">
+    mc:Ignorable="d" >
 
     <Page.Transitions>
         <TransitionCollection>
@@ -26,16 +25,13 @@
     <Page.Resources>
         <converter:AutoSuggestTextConverter x:Key="TextChangedConverter"/>
         <converter:AutoSuggestQueryConverter x:Key="QuerySubmitedConverter"/>
-        <DataTemplate x:Key="ShowTemplate" x:DataType="trakt:TraktShow">
+        <DataTemplate x:Key="ShowTemplate">
             <Grid Background="LightGray">
-                <uwp:ImageEx Source="{x:Bind Images.Poster.Medium}"
+                <Image Source="{Binding Images.Poster.Medium}"
                              Stretch="UniformToFill"
-                             PlaceholderSource="Assets/trakt-icon.png"
-                             PlaceholderStretch="None"
-                             IsCacheEnabled="True"
                              VerticalAlignment="Stretch"
                              HorizontalAlignment="Stretch"/>
-                <TextBlock Text="{x:Bind Title}"
+                <TextBlock Text="{Binding Title}"
                            Style="{StaticResource SubtitleTextBlockStyle}"
                            Margin="12"
                            Foreground="White"
@@ -53,6 +49,8 @@
         <AutoSuggestBox x:Name="SearchBox"
                         ItemsSource="{Binding SearchSuggestions}"
                         Text="{Binding SearchQuery, Mode=TwoWay}"
+                        TextChanged="SearchBox_OnTextChanged"
+                        QuerySubmitted="SearchBox_OnQuerySubmitted"
                         Width="240"
                         Margin="20"
                         HorizontalAlignment="Left"
@@ -72,7 +70,8 @@
                 </interactivity:BehaviorCollection>
             </interactivity:Interaction.Behaviors>
         </AutoSuggestBox>
-        <uwp:AdaptiveGridView ItemsSource="{Binding Shows}"
+        <uwp:AdaptiveGridView x:Name="ShowsGrid"
+                              ItemsSource="{Binding Shows}"
                               ItemTemplate="{StaticResource ShowTemplate}"
                               ItemHeight="400"
                               ItemClick="AdaptiveGridView_OnItemClick"

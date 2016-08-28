@@ -109,8 +109,6 @@
     <Compile Include="UI\Converters\AutoSuggestTextConverter.cs" />
     <Compile Include="UI\Converters\EpisodeTitleConverter.cs" />
     <Compile Include="UI\Converters\RuntimeConverter.cs" />
-    <Compile Include="ViewModels\DetailViewModel.cs" />
-    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="VotesConverter.cs" />
   </ItemGroup>
   <ItemGroup>

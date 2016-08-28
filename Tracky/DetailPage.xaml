@@ -9,8 +9,7 @@
     xmlns:trakt="using:TraktApiSharp.Objects.Basic"
     xmlns:episode="using:TraktApiSharp.Objects.Get.Shows.Episodes"
     xmlns:converter="using:Tracky.UI.Converters"
-    mc:Ignorable="d"
-    DataContext="{StaticResource Detail}">
+    mc:Ignorable="d">
 
     <Page.Resources>
         <converter:RuntimeConverter x:Key="Runtime"/>
@@ -60,37 +59,36 @@
         <Grid Grid.Row="0" Grid.RowSpan="2">
             <uwp:ImageEx x:Name="Background"
                          IsCacheEnabled="True"
-                         Source="{Binding Show.Images.FanArt.Full}"
+                         Source="{Binding Images.FanArt.Full}"
                          Stretch="UniformToFill"
                          HorizontalAlignment="Stretch"
                          VerticalAlignment="Stretch" />
             <Border Background="#A5000000" />
             <ScrollViewer VerticalScrollBarVisibility="Hidden">
                 <RelativePanel x:Name="ContentRoot">
-                    <RelativePanel.ChildrenTransitions>
+                    <!--<RelativePanel.ChildrenTransitions>
                         <TransitionCollection>
                             <EntranceThemeTransition FromVerticalOffset="80"
                                                      IsStaggeringEnabled="True" />
                         </TransitionCollection>
-                    </RelativePanel.ChildrenTransitions>
-                    <uwp:ImageEx x:Name="Poster"
+                    </RelativePanel.ChildrenTransitions>-->
+                    <Image x:Name="Poster"
                                  Margin="80,80,0,0"
-                                 IsCacheEnabled="True"
-                                 Source="{Binding Show.Images.Poster.Medium}"
+                                 Source="{Binding Images.Poster.Medium}"
                                  Stretch="UniformToFill"
                                  Width="260"
                                  Height="400"
                                  HorizontalAlignment="Left"
                                  VerticalAlignment="Top" />
                     <TextBlock x:Name="Title"
-                               Text="{Binding Show.Title}"
+                               Text="{Binding Title}"
                                Style="{ThemeResource HeaderTextBlockStyle}"
                                Margin="40,64,0,0"
                                Foreground="White"
                                RelativePanel.RightOf="Poster"
                                RelativePanel.AlignTopWith="Poster" />
                     <TextBlock x:Name="Year"
-                               Text="{Binding Show.Year}"
+                               Text="{Binding Year}"
                                Style="{ThemeResource CaptionTextBlockStyle}"
                                Margin="8,0,0,8"
                                Foreground="White"
@@ -127,7 +125,7 @@
                                   Glyph="&#xE006;" />
 
                         <TextBlock x:Name="Rating"
-                                   Text="{Binding Show.Rating, Converter={StaticResource Ratings}}"
+                                   Text="{Binding Rating, Converter={StaticResource Ratings}}"
                                    Style="{ThemeResource BodyTextBlockStyle}"
                                    Margin="8,0,0,0"
                                    Foreground="White"
@@ -137,7 +135,7 @@
                                    Grid.Column="1" />
 
                         <TextBlock x:Name="Votes"
-                                   Text="{Binding Show.Votes, Converter={StaticResource Votes}}"
+                                   Text="{Binding Votes, Converter={StaticResource Votes}}"
                                    Style="{ThemeResource BodyTextBlockStyle}"
                                    Margin="8,0,0,0"
                                    Foreground="White"
@@ -151,7 +149,7 @@
                     <uwp:HeaderedTextBlock x:Name="Runtime"
                                            Margin="32,0,0,0"
                                            Header="RUNTIME"
-                                           Text="{Binding Show.Runtime, Converter={StaticResource Runtime}}"
+                                           Text="{Binding Runtime, Converter={StaticResource Runtime}}"
                                            HeaderStyle="{StaticResource HeaderedTextBlockHeaderStyle}"
                                            TextStyle="{StaticResource HeaderedTextBlockTextStyle}"
                                            VerticalContentAlignment="Bottom"
@@ -160,7 +158,7 @@
                                            RelativePanel.AlignVerticalCenterWith="RatingGrid" />
 
                     <TextBlock x:Name="Overview"
-                               Text="{Binding Show.Overview}"
+                               Text="{Binding Overview}"
                                Style="{ThemeResource BodyTextBlockStyle}"
                                Margin="40,40,20,0"
                                Foreground="White"
@@ -178,7 +176,6 @@
                                RelativePanel.AlignLeftWith="Title" />
 
                     <GridView x:Name="ActorsGrid"
-                              ItemsSource="{Binding Actors}"
                               ItemTemplate="{StaticResource ActorTemplate}"
                               Margin="40,20,0,0"
                               MaxWidth="1000"
@@ -187,7 +184,7 @@
                               RelativePanel.Below="ActorsHeader"
                               RelativePanel.AlignLeftWith="Title" />
 
-                    <TextBlock x:Name="RecentEpisodes"
+                    <TextBlock x:Name="RecentEpisodesHeader"
                                Text="Recent episodes"
                                Style="{ThemeResource SubheaderTextBlockStyle}"
                                Margin="40,44,0,0"
@@ -196,11 +193,10 @@
                                RelativePanel.AlignLeftWith="Title"/>
 
                     <ListView x:Name="EpisodesList"
-                              ItemsSource="{Binding RecentEpisodes}"
                               MaxWidth="1000"
                               Margin="40,20,0,20"
                               SelectionMode="None"
-                              RelativePanel.Below="RecentEpisodes"
+                              RelativePanel.Below="RecentEpisodesHeader"
                               RelativePanel.AlignLeftWith="Title">
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
@@ -263,7 +259,7 @@
             </Grid>
 
             <Grid x:Name="MainTitleBar" Background="Transparent" Grid.Column="1">
-                <TextBlock Text="{Binding Show.Title}"
+                <TextBlock Text="{Binding Title}"
                            VerticalAlignment="Center"
                            FontSize="12"
                            FontFamily="Segoe UI"

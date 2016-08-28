@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI;
 using Windows.UI.Core;
@@ -8,8 +11,11 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using Microsoft.Toolkit.Uwp.UI.Animations;
-using Tracky.ViewModels;
+using TraktApiSharp;
+using TraktApiSharp.Objects.Basic;
 using TraktApiSharp.Objects.Get.Shows;
+using TraktApiSharp.Objects.Get.Shows.Episodes;
+using TraktApiSharp.Requests.Params;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
@@ -20,9 +26,12 @@ namespace Tracky
     /// </summary>
     public sealed partial class DetailPage : Page
     {
+        private readonly TraktClient _client;
+
         public DetailPage()
         {
             this.InitializeComponent();
+            _client = new TraktClient(Constants.TraktId);
             Window.Current.Activated += CurrentOnActivated;
         }
         
@@ -30,6 +39,22 @@ namespace Tracky
         {
             base.OnNavigatedTo(e);
 
+            CustomizeTitleBar();
+
+            var show = (TraktShow)e.Parameter;
+            DataContext = show;
+
+            AnimatePoster();
+
+            await LoadActorsAsync();
+            await LoadRecentEpisodesAsync();
+            await Background
+                .Blur(value: 5, duration: 1000, delay: 400)
+                .StartAsync();
+        }
+
+        private void CustomizeTitleBar()
+        {
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
             coreTitleBar.LayoutMetricsChanged += CoreTitleBarOnLayoutMetricsChanged;
@@ -44,13 +69,41 @@ namespace Tracky
                     titleBar.ButtonBackgroundColor = Color.FromArgb(0, 0, 0, 0);
                 }
             }
+        }
 
-            var show = (TraktShow)e.Parameter;
-            var ctx = this.DataContext as DetailViewModel;
-            await ctx.OnNavigatedTo(show);
-            await Background
-                .Blur(value: 5, duration: 1000, delay: 400)
-                .StartAsync();
+        private void AnimatePoster()
+        {
+            var animation = ConnectedAnimationService.GetForCurrentView().GetAnimation("Poster");
+            if (animation != null)
+            {
+                Poster.Opacity = 0;
+                Poster.ImageOpened += (sender_, e_) =>
+                {
+                    Poster.Opacity = 1;
+                    animation.TryStart(Poster);
+                };
+            }
+        }
+
+        private async Task LoadActorsAsync()
+        {
+            var show = DataContext as TraktShow;
+            var showPeople = await _client.Shows.GetShowPeopleAsync(show.Ids.Trakt.ToString(), new TraktExtendedOption { Full = true, Images = true });
+            ActorsGrid.ItemsSource = showPeople.Cast;
+        }
+
+        private async Task LoadRecentEpisodesAsync()
+        {
+            var show = DataContext as TraktShow;
+            var showSeasons = await _client.Seasons.GetAllSeasonsAsync(show.Ids.Slug);
+            if (!showSeasons.Any()) return;
+
+            var lastSeason =
+                await
+                    _client.Seasons.GetSeasonAsync(show.Ids.Slug, showSeasons.Last().Number.Value,
+                        new TraktExtendedOption() { Episodes = true, Images = true });
+            var recentEpisodes = lastSeason.Reverse().Take(3).ToList();
+            EpisodesList.ItemsSource = recentEpisodes;
         }
 
         private void CurrentOnActivated(object sender, WindowActivatedEventArgs windowActivatedEventArgs)
@@ -69,12 +122,6 @@ namespace Tracky
         {
             TitleBar.Height = sender.Height;
             RightMask.Width = sender.SystemOverlayRightInset;
-        }
-
-        private void BackButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (Frame.CanGoBack)
-                Frame.GoBack();
         }
     }
 }
