@@ -88,6 +88,8 @@ namespace Tracky.ViewModels
 
         private async Task PerformSearchQueryAsync(TraktShow selectedShow)
         {
+            Shows.Clear();
+
             var query = string.Empty;
 
             query = selectedShow == null ? SearchQuery : selectedShow.Title;
@@ -100,7 +102,6 @@ namespace Tracky.ViewModels
                 .ToList();
 
             var fullShows = await Task.WhenAll(tasks);
-            Shows.Clear();
             Shows.AddRange(fullShows);
         }
     }
