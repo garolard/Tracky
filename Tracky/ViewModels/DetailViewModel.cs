@@ -58,6 +58,8 @@ namespace Tracky.ViewModels
         private async Task LoadRecentEpisodesAsync()
         {
             var showSeasons = await _client.Seasons.GetAllSeasonsAsync(Show.Ids.Slug);
+            if (!showSeasons.Any()) return;
+
             var lastSeason =
                 await
                     _client.Seasons.GetSeasonAsync(Show.Ids.Slug, showSeasons.Last().Number.Value,
