@@ -49,7 +49,7 @@ namespace Tracky
             var ctx = this.DataContext as DetailViewModel;
             await ctx.OnNavigatedTo(show);
             await Background
-                .Blur(value: 5, duration: 1000, delay: 500)
+                .Blur(value: 5, duration: 1000, delay: 400)
                 .StartAsync();
         }
 
