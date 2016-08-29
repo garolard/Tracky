@@ -30,6 +30,27 @@ namespace Tracky
         {
             base.OnNavigatedTo(e);
 
+            CustomizeTitleBar();
+
+            if (!Windows.Foundation.Metadata.ApiInformation.IsTypePresent(
+                    "Windows.UI.Xaml.Media.Animation.ConnectedAnimationService"))
+            {
+                BackButton.Width = 48;
+                BackButton.Height = 36;
+                BackButton.Visibility = Visibility.Visible;
+                BackButton.Click += (s, args) => Frame.GoBack();
+            }
+
+            var show = (TraktShow)e.Parameter;
+            var ctx = this.DataContext as DetailViewModel;
+            await ctx.OnNavigatedTo(show);
+            var blur = Background.Blur(value: 5, duration: 1000, delay: 400);
+            if (blur != null)
+                await blur.StartAsync();
+        }
+
+        private void CustomizeTitleBar()
+        {
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
             coreTitleBar.LayoutMetricsChanged += CoreTitleBarOnLayoutMetricsChanged;
@@ -45,12 +66,7 @@ namespace Tracky
                 }
             }
 
-            var show = (TraktShow)e.Parameter;
-            var ctx = this.DataContext as DetailViewModel;
-            await ctx.OnNavigatedTo(show);
-            await Background
-                .Blur(value: 5, duration: 1000, delay: 400)
-                .StartAsync();
+            
         }
 
         private void CurrentOnActivated(object sender, WindowActivatedEventArgs windowActivatedEventArgs)
@@ -69,12 +85,6 @@ namespace Tracky
         {
             TitleBar.Height = sender.Height;
             RightMask.Width = sender.SystemOverlayRightInset;
-        }
-
-        private void BackButton_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (Frame.CanGoBack)
-                Frame.GoBack();
         }
     }
 }

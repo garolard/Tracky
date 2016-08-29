@@ -259,7 +259,11 @@
             </Grid.ColumnDefinitions>
 
             <Grid x:Name="ButtonHolder" Width="48">
-                
+                <Button x:Name="BackButton"
+                        Style="{StaticResource NavigationBackButtonNormalStyle}"
+                        Foreground="White"
+                        FontSize="12"
+                        Visibility="Collapsed"/>
             </Grid>
 
             <Grid x:Name="MainTitleBar" Background="Transparent" Grid.Column="1">

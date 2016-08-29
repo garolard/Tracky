@@ -37,6 +37,17 @@ namespace Tracky
         {
             base.OnNavigatedTo(e);
 
+            CustomizeTitleBar();
+
+            if (e.NavigationMode == NavigationMode.Back)
+            {
+                var ctx = DataContext as MainViewModel;
+                await ctx.ClearStateAsync();
+            }
+        }
+
+        private static void CustomizeTitleBar()
+        {
             CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = false;
 
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.ApplicationView"))
@@ -46,12 +57,6 @@ namespace Tracky
                 {
                     titleBar.ButtonBackgroundColor = null;
                 }
-            }
-
-            if (e.NavigationMode == NavigationMode.Back)
-            {
-                var ctx = DataContext as MainViewModel;
-                await ctx.ClearStateAsync();
             }
         }
 
