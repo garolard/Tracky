@@ -65,8 +65,6 @@ namespace Tracky
                     titleBar.ButtonBackgroundColor = Color.FromArgb(0, 0, 0, 0);
                 }
             }
-
-            
         }
 
         private void CurrentOnActivated(object sender, WindowActivatedEventArgs windowActivatedEventArgs)

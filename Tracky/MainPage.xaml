@@ -26,6 +26,8 @@
     <Page.Resources>
         <converter:AutoSuggestTextConverter x:Key="TextChangedConverter"/>
         <converter:AutoSuggestQueryConverter x:Key="QuerySubmitedConverter"/>
+        <converter:BoolToVisibilityConverter x:Key="BoolToVisibility"/>
+        <converter:InverseBoolToVisbilityConverter x:Key="InverseBoolToVisibility"/>
         <DataTemplate x:Key="ShowTemplate" x:DataType="trakt:TraktShow">
             <Grid Background="LightGray">
                 <uwp:ImageEx Source="{x:Bind Images.Poster.Medium}"
@@ -48,17 +50,26 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+        <TextBlock Text="Shows"
+                   Style="{ThemeResource HeaderTextBlockStyle}"
+                   FontSize="84"
+                   Margin="20,0,0,10"
+                   HorizontalAlignment="Left"
+                   Opacity=".25"
+                   Grid.Row="1"/>
         <AutoSuggestBox x:Name="SearchBox"
                         ItemsSource="{Binding SearchSuggestions}"
                         Text="{Binding SearchQuery, Mode=TwoWay}"
                         Width="240"
                         Margin="20"
-                        HorizontalAlignment="Left"
+                        HorizontalAlignment="Right"
                         DisplayMemberPath="Title"
                         TextMemberPath="Title"
-                        QueryIcon="Find">
+                        QueryIcon="Find"
+                        Grid.Row="1">
             <interactivity:Interaction.Behaviors>
                 <interactivity:BehaviorCollection>
                     <core:EventTriggerBehavior EventName="TextChanged">
@@ -72,21 +83,123 @@
                 </interactivity:BehaviorCollection>
             </interactivity:Interaction.Behaviors>
         </AutoSuggestBox>
-        <uwp:AdaptiveGridView ItemsSource="{Binding Shows}"
-                              ItemTemplate="{StaticResource ShowTemplate}"
-                              ItemHeight="400"
-                              ItemClick="AdaptiveGridView_OnItemClick"
-                              DesiredWidth="260"
-                              HorizontalContentAlignment="Center"
-                              Grid.Row="1">
-            <uwp:AdaptiveGridView.Transitions>
-                <TransitionCollection>
-                    <EntranceThemeTransition FromVerticalOffset="60"
-                                             IsStaggeringEnabled="True"/>
-                    <AddDeleteThemeTransition/>
-                    <ContentThemeTransition/>
-                </TransitionCollection>
-            </uwp:AdaptiveGridView.Transitions>
-        </uwp:AdaptiveGridView>
+
+        <ScrollViewer Grid.Row="2">
+            <RelativePanel>
+                <TextBlock x:Name="TrendyHeader"
+                           Text="Trendings now"
+                           Style="{ThemeResource SubheaderTextBlockStyle}"
+                           Margin="20,10,0,20"
+                           Opacity=".65"
+                           Visibility="{Binding SearchResultsAvailable, Converter={StaticResource InverseBoolToVisibility}}"
+                           RelativePanel.AlignLeftWithPanel="True"
+                           RelativePanel.AlignTopWithPanel="True" />
+                <uwp:AdaptiveGridView x:Name="TrendyShows"
+                                      ItemsSource="{Binding TrendyShows}"
+                                      ItemHeight="400"
+                                      ItemClick="AdaptiveGridView_OnItemClick"
+                                      DesiredWidth="260"
+                                      OneRowModeEnabled="True"
+                                      Visibility="{Binding SearchResultsAvailable, Converter={StaticResource InverseBoolToVisibility}}"
+                                      RelativePanel.AlignLeftWithPanel="True"
+                                      RelativePanel.AlignRightWithPanel="True"
+                                      RelativePanel.Below="TrendyHeader">
+                    <uwp:AdaptiveGridView.ItemTemplate>
+                        <DataTemplate x:DataType="trakt:TraktShow">
+                            <Grid Background="LightGray">
+                                <uwp:ImageEx Source="{x:Bind Images.Poster.Medium}"
+                                             Stretch="UniformToFill"
+                                             PlaceholderSource="Assets/trakt-icon.png"
+                                             PlaceholderStretch="None"
+                                             IsCacheEnabled="True"
+                                             VerticalAlignment="Stretch"
+                                             HorizontalAlignment="Stretch" />
+                            </Grid>
+                        </DataTemplate>
+                    </uwp:AdaptiveGridView.ItemTemplate>
+                </uwp:AdaptiveGridView>
+
+                <TextBlock x:Name="PopularHeader"
+                           Text="Popular"
+                           Style="{ThemeResource SubheaderTextBlockStyle}"
+                           Margin="20,40,0,20"
+                           Visibility="{Binding SearchResultsAvailable, Converter={StaticResource InverseBoolToVisibility}}"
+                           RelativePanel.Below="TrendyShows"
+                           RelativePanel.AlignLeftWithPanel="True" />
+                <uwp:AdaptiveGridView x:Name="PopularShows"
+                                      ItemsSource="{Binding PopularShows}"
+                                      ItemHeight="400"
+                                      ItemClick="AdaptiveGridView_OnItemClick"
+                                      DesiredWidth="260"
+                                      OneRowModeEnabled="True"
+                                      Visibility="{Binding SearchResultsAvailable, Converter={StaticResource InverseBoolToVisibility}}"
+                                      RelativePanel.AlignLeftWithPanel="True"
+                                      RelativePanel.AlignRightWithPanel="True"
+                                      RelativePanel.Below="PopularHeader">
+                    <uwp:AdaptiveGridView.ItemTemplate>
+                        <DataTemplate x:DataType="trakt:TraktShow">
+                            <Grid Background="LightGray">
+                                <uwp:ImageEx Source="{x:Bind Images.Poster.Medium}"
+                                             Stretch="UniformToFill"
+                                             PlaceholderSource="Assets/trakt-icon.png"
+                                             PlaceholderStretch="None"
+                                             IsCacheEnabled="True"
+                                             VerticalAlignment="Stretch"
+                                             HorizontalAlignment="Stretch" />
+                            </Grid>
+                        </DataTemplate>
+                    </uwp:AdaptiveGridView.ItemTemplate>
+                </uwp:AdaptiveGridView>
+
+                <TextBlock x:Name="SearchHeader"
+                           Text="Search results"
+                           Style="{ThemeResource SubheaderTextBlockStyle}"
+                           Margin="20,10,0,20"
+                           Opacity=".65"
+                           Visibility="{Binding SearchResultsAvailable, Converter={StaticResource BoolToVisibility}}"
+                           RelativePanel.AlignLeftWithPanel="True"
+                           RelativePanel.AlignTopWithPanel="True"/>
+                <uwp:AdaptiveGridView x:Name="Searchresults"
+                                      ItemsSource="{Binding Shows}"
+                                      ItemTemplate="{StaticResource ShowTemplate}"
+                                      ItemHeight="400"
+                                      ItemClick="AdaptiveGridView_OnItemClick"
+                                      DesiredWidth="260"
+                                      Visibility="{Binding SearchResultsAvailable, Converter={StaticResource BoolToVisibility}}"
+                                      RelativePanel.AlignLeftWithPanel="True"
+                                      RelativePanel.AlignRightWithPanel="True"
+                                      RelativePanel.Below="SearchHeader">
+                    <uwp:AdaptiveGridView.Transitions>
+                        <TransitionCollection>
+                            <EntranceThemeTransition FromVerticalOffset="60"
+                                            IsStaggeringEnabled="True"/>
+                            <AddDeleteThemeTransition/>
+                            <ContentThemeTransition/>
+                        </TransitionCollection>
+                    </uwp:AdaptiveGridView.Transitions>
+                </uwp:AdaptiveGridView>
+            </RelativePanel>
+        </ScrollViewer>
+        
+        
+
+        <!-- Custom TitleBar -->
+        <Grid x:Name="TitleBar" Grid.Row="0" Background="Transparent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid x:Name="MainTitleBar" Background="Transparent">
+                <TextBlock Text="Tracky"
+                           VerticalAlignment="Center"
+                           FontSize="12"
+                           FontFamily="Segoe UI"
+                           FontWeight="Normal"
+                           Margin="10,0"/>
+            </Grid>
+
+            <Grid x:Name="RightMask" Grid.Column="1"></Grid>
+        </Grid>
     </Grid>
 </Page>

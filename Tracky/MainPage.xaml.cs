@@ -3,12 +3,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.UI;
+using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using GeekyTool.Messaging;
 using Microsoft.Toolkit.Uwp.UI;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using Tracky.ViewModels;
@@ -30,6 +32,7 @@ namespace Tracky
         public MainPage()
         {
             this.InitializeComponent();
+            Window.Current.Activated += CurrentOnActivated;
             NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
@@ -39,24 +42,42 @@ namespace Tracky
 
             CustomizeTitleBar();
 
-            if (e.NavigationMode == NavigationMode.Back)
+            var ctx = DataContext as MainViewModel;
+            await ctx.OnNavigatedTo(null);
+        }
+        
+        private void CustomizeTitleBar()
+        {
+            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            coreTitleBar.ExtendViewIntoTitleBar = true;
+            coreTitleBar.LayoutMetricsChanged += CoreTitleBarOnLayoutMetricsChanged;
+            TitleBar.Height = coreTitleBar.Height;
+            Window.Current.SetTitleBar(MainTitleBar);
+
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent(
+                    "Windows.UI.ViewManagement.ApplicationView"))
             {
-                var ctx = DataContext as MainViewModel;
-                await ctx.ClearStateAsync();
+                var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+                titleBar.ButtonForegroundColor = null;
+                titleBar.ButtonBackgroundColor = null;
             }
         }
 
-        private static void CustomizeTitleBar()
+        private void CoreTitleBarOnLayoutMetricsChanged(CoreApplicationViewTitleBar sender, object args)
         {
-            CoreApplication.GetCurrentView().TitleBar.ExtendViewIntoTitleBar = false;
+            TitleBar.Height = sender.Height;
+            RightMask.Width = sender.SystemOverlayRightInset;
+        }
 
-            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.UI.ViewManagement.ApplicationView"))
+        private void CurrentOnActivated(object sender, WindowActivatedEventArgs windowActivatedEventArgs)
+        {
+            if (windowActivatedEventArgs.WindowActivationState != CoreWindowActivationState.Deactivated)
             {
-                var titleBar = ApplicationView.GetForCurrentView().TitleBar;
-                if (titleBar != null)
-                {
-                    titleBar.ButtonBackgroundColor = null;
-                }
+                MainTitleBar.Opacity = 1;
+            }
+            else
+            {
+                MainTitleBar.Opacity = 0.5;
             }
         }
 
